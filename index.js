@@ -1,49 +1,116 @@
 const fs = require("fs");
 const axios = require("axios");
 const inquirer = require("inquirer");
-// # Unit 09 Node.js and ES6+ Homework: Good README Generator
-// Create a command-line application that dynamically generates a README.md
-// from a user's input. The application will be invoked with the following command:
-// The user will be prompted for their GitHub username,
-console.log("Hello World!");
 
 inquirer
-  .prompt({
-    message: "Enter your GitHub username:",
-    name: "username"
-  })
-  .then(function({ username }) {
-    const queryUrl = `https://api.github.com/users/${username}`;
+  .prompt([
+    {
+      // GITHUB USERNAME
+      type: "input",
+      message: "Enter your GitHub username:",
+      name: "username"
+    },
+    {
+      // EMAIL address - not working in Github query
+      type: "input",
+      message: "Enter your email address:",
+      name: "email"
+    },
+    {
+      // TITLE of README.md
+      type: "input",
+      message: "Enter your project's title:",
+      name: "title"
+    },
+    {
+      // DESCRIPTION - 5 questions
+      type: "input",
+      message: "Description: What was your motivation?",
+      name: "description1"
+    },
+    {
+      type: "input",
+      message: "Description: Why did you build this project?",
+      name: "description2"
+    },
+    {
+      type: "input",
+      message: "Description: What problem does it solve?",
+      name: "description3"
+    },
+    {
+      type: "input",
+      message: "Description: What did you learn?",
+      name: "description4"
+    },
+    {
+      type: "input",
+      message: "Description: What makes your project stand out?",
+      name: "description5"
+    },
+    {
+      // INSTALLATION
+      type: "input",
+      message: "Installation: What are the steps required to install your project?",
+      name: "installation"
+    },
+    {
+      // CREDITS - 3 questions
+      type: "input",
+      message: "Credits: If you had any collaborators, list their names and/or github usernames?",
+      name: "credits1"
+    },
+    {
+      type: "input",
+      message: "Credits: If you used any third-party assets, list the creators?",
+      name: "credits2"
+    },
+    {
+      type: "input",
+      message: "Credits: If you followed tutorials, list the links?",
+      name: "credits3"
+    },
+    {
+      // LICENSE
+      type: "confirm",
+      message: "License: Do you want to add a standard MIT License?",
+      name: "license"
+    },
+    {
+      // CONTRIBUTING
+      type: "confirm",
+      message: "Contributing: Do you want to add a Contributor Code of Conduct?",
+      name: "contributing"
+    },
+    {
+      // TESTS
+      type: "input",
+      message: "Tests: How do you run tests for your application?",
+      name: "tests"
+    }
+  ])
+  .then(data => {
+    const queryUrl = `https://api.github.com/users/${data.username}`;
     console.log(queryUrl);
+    console.log(data.email);
 
     axios
       .get(queryUrl)
       .then(response => {
         console.log(response.data);
+        console.log(response.data.name);
+        console.log(response.data.avatar_url);
       })
       .catch(error => {
         console.log(error);
       });
   });
 
-// which will be used to make a call to the GitHub API
-// to retrieve their email and profile image.
-// They will then be prompted with questions about their project.
 
-// The README will be populated with the following:
-
-// * Project title - Add with # ("h1")
 
 // * At least one badge
 // Add list of 4 badges: [![License](https://img.shields.io/static/v1?label=License&message=MIT&color=brightgreen)](https://www.mit.edu/~amini/LICENSE.md)
 
-// * Description - Add with ## ("h2")
-// Add a short description explaining the what, why, and how.
-// What was your motivation?
-// Why did you build this project?
-// What problem does it solve?
-// What did you learn?
-// What makes your project stand out?
 
 // * Table of Contents - Add with ## ("h2") [Optional]
 // Add a table of contents to make it easy for users to find what they need.
@@ -55,18 +122,9 @@ inquirer
 //   * Tests
 //   * Questions
 
-// * Installation - Add with ## ("h2")
-// What are the steps required to install your project?
-
 // * Usage - Add with ## ("h2")
 // Provide instructions and examples for use
 // Include screenshots as needed.
-
-// * Credits - Add with ## ("h2")
-// List your collaborators, if any.
-// links to their GitHub profiles.
-// If you used any third-party assets, list the creators.
-// If you followed tutorials, include links to those here as well.
 
 // * License
 // The last section - let developers know what they can and cannot do with your project.
@@ -87,14 +145,6 @@ inquirer
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-
-// * Contributing
-
-// * Tests
-
-// * Questions
-//   * User GitHub profile picture
-//   * User GitHub email
 
 // ```
 // AS A developer
