@@ -1,33 +1,52 @@
 const fs = require("fs");
 const axios = require("axios");
 const inquirer = require("inquirer");
-
 // # Unit 09 Node.js and ES6+ Homework: Good README Generator
-// Create a command-line application that dynamically generates a README.md 
+// Create a command-line application that dynamically generates a README.md
 // from a user's input. The application will be invoked with the following command:
-// The user will be prompted for their GitHub username, 
-// which will be used to make a call to the GitHub API 
-// to retrieve their email and profile image. 
+// The user will be prompted for their GitHub username,
+console.log("Hello World!");
+
+inquirer
+  .prompt({
+    message: "Enter your GitHub username:",
+    name: "username"
+  })
+  .then(function({ username }) {
+    const queryUrl = `https://api.github.com/users/${username}`;
+    console.log(queryUrl);
+
+    axios
+      .get(queryUrl)
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  });
+
+// which will be used to make a call to the GitHub API
+// to retrieve their email and profile image.
 // They will then be prompted with questions about their project.
-console.log ("Hello World!")
 
 // The README will be populated with the following:
 
-// * Project title - Add with # ("h1") 
+// * Project title - Add with # ("h1")
 
 // * At least one badge
 // Add list of 4 badges: [![License](https://img.shields.io/static/v1?label=License&message=MIT&color=brightgreen)](https://www.mit.edu/~amini/LICENSE.md)
 
 // * Description - Add with ## ("h2")
-// Add a short description explaining the what, why, and how. 
+// Add a short description explaining the what, why, and how.
 // What was your motivation?
-// Why did you build this project? 
-// What problem does it solve? 
-// What did you learn? 
-// What makes your project stand out? 
+// Why did you build this project?
+// What problem does it solve?
+// What did you learn?
+// What makes your project stand out?
 
 // * Table of Contents - Add with ## ("h2") [Optional]
-// Add a table of contents to make it easy for users to find what they need. 
+// Add a table of contents to make it easy for users to find what they need.
 //   * Installation
 //   * Usage
 //   * Credits
@@ -36,21 +55,21 @@ console.log ("Hello World!")
 //   * Tests
 //   * Questions
 
-// * Installation - Add with ## ("h2") 
-// What are the steps required to install your project? 
+// * Installation - Add with ## ("h2")
+// What are the steps required to install your project?
 
-// * Usage - Add with ## ("h2") 
+// * Usage - Add with ## ("h2")
 // Provide instructions and examples for use
-// Include screenshots as needed. 
+// Include screenshots as needed.
 
-// * Credits - Add with ## ("h2") 
-// List your collaborators, if any. 
-// links to their GitHub profiles. 
-// If you used any third-party assets, list the creators. 
-// If you followed tutorials, include links to those here as well. 
+// * Credits - Add with ## ("h2")
+// List your collaborators, if any.
+// links to their GitHub profiles.
+// If you used any third-party assets, list the creators.
+// If you followed tutorials, include links to those here as well.
 
 // * License
-// The last section - let developers know what they can and cannot do with your project. 
+// The last section - let developers know what they can and cannot do with your project.
 // MIT License
 // Copyright (c) [year] [fullname]
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -97,7 +116,7 @@ console.log ("Hello World!")
 // * GitHub repository with a unique name and a README describing project.
 // * The generated README includes a bio image from the user's GitHub profile.
 // * The generated README includes the user's email.
-// * The generated README includes the following sections: 
+// * The generated README includes the following sections:
 //   * Title
 //   * Description
 //   * Table of Contents
