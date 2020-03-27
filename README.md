@@ -73,7 +73,11 @@ npm test
 
 ## Questions
 
+Username: noobatl
+
+Email: info@noobusa.com
+
 <img src="https://avatars0.githubusercontent.com/u/60041697?v=4" alt="avatar" style="border-radius:16px" width="50" />
 
-If you have any questions about this repo, open an issue or contact [JJ Villacres](https://api.github.com/users/noobatl) directly at info@noobusa.com.
+If you have any questions about this repo, open an issue or contact [JJ Villacres](https://api.github.com/users/noobatl) directly at the email above.
 

@@ -198,7 +198,7 @@ inquirer
   .then(answers => {
     let readMeText = readMeTemplate(answers);
 
-    fs.appendFile("GeneratedREADME.md", readMeText, err => {
+    fs.appendFile("newREADME.md", readMeText, err => {
       if (err) {
         return console.log(err);
       }
@@ -211,14 +211,8 @@ inquirer
     axios
       .get(queryUrl)
       .then(response => {
-        // console.log(response.data);
-        // console.log(answers.username);
-        // console.log(response.data.name);
-        // console.log(response.data.avatar_url);
-        // console.log(response.data.html_url);
-        // console.log(answers.email);
         let questionText = questionsTemplate(response.data);
-        fs.appendFile("GeneratedREADME.md", questionText, err => {
+        fs.appendFile("newREADME.md", questionText, err => {
           if (err) {
             return console.log(err);
           }
@@ -241,9 +235,3 @@ return `
 If you have any questions about this repo, open an issue or contact [${data.name}](${data.html_url}) directly at the email above.
 `
 };
-
-// ## Submission on BCS
-// You are required to submit the following:
-// * An animated GIF demonstrating the app functionality
-// * A generated README.md file for a project repo.
-// * The URL of the GitHub
