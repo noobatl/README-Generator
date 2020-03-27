@@ -2,6 +2,53 @@ const fs = require("fs");
 const axios = require("axios");
 const inquirer = require("inquirer");
 
+function readMeTemplate(res) {
+  return `
+# ${res.title}\n
+
+[![GitHub package.json version](https://img.shields.io/github/package-json/v/noobatl/README-Generator?style=flat)](https://github.com/noobatl/README-Generator) [![npm](https://img.shields.io/npm/v/npm?style=flat)](https://www.npmjs.com/) [![node](https://img.shields.io/node/v/inquirer?style=flat)](https://nodejs.org/en/) [![License](https://img.shields.io/static/v1?label=License&message=MIT&color=brightgreen)](https://www.mit.edu/~amini/LICENSE.md) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md)clear
+
+## DESCRIPTION\n 
+${res.description1}
+${res.description2}
+${res.description3}
+${res.description4}
+${res.description5}   
+
+## Table of Contents
+
+* [Installation](#installation)
+
+* [Usage](#usage)
+
+* [Credits](#credits)
+
+* [License](#License)
+
+* [Contributing](#contributing)
+
+* [Tests](#tests)
+
+* [Questions](#questions)
+      
+## INSTALLATION\n
+${res.installation}
+  
+## CREDITS\n
+${res.credits1}
+${res.credits2}
+${res.credits3}
+  
+## LICENSE\n
+${res.license}
+  
+## CONTRIBUTING\n
+${res.contributing}
+  
+## TESTS\n
+${res.tests}`;
+}
+
 inquirer
   .prompt([
     {
@@ -51,18 +98,21 @@ inquirer
     {
       // INSTALLATION
       type: "input",
-      message: "Installation: What are the steps required to install your project?",
+      message:
+        "Installation: What are the steps required to install your project?",
       name: "installation"
     },
     {
       // CREDITS - 3 questions
       type: "input",
-      message: "Credits: If you had any collaborators, list their names and/or github usernames?",
+      message:
+        "Credits: If you had any collaborators, list their names and/or github usernames?",
       name: "credits1"
     },
     {
       type: "input",
-      message: "Credits: If you used any third-party assets, list the creators?",
+      message:
+        "Credits: If you used any third-party assets, list the creators?",
       name: "credits2"
     },
     {
@@ -79,7 +129,8 @@ inquirer
     {
       // CONTRIBUTING
       type: "confirm",
-      message: "Contributing: Do you want to add a Contributor Code of Conduct?",
+      message:
+        "Contributing: Do you want to add a Contributor Code of Conduct?",
       name: "contributing"
     },
     {
@@ -89,42 +140,28 @@ inquirer
       name: "tests"
     }
   ])
-  .then(data => {
-    
-    const title = `# ${data.title}`;
-    console.log(data.description1);
-    console.log(data.description2);
-    console.log(data.description3);
-    console.log(data.description4);
-    console.log(data.description5);
-    console.log(data.installation);
-    console.log(data.credits1);
-    console.log(data.credits2);
-    console.log(data.credits3);
-    console.log(data.license);
-    console.log(data.contributing);
-    console.log(data.tests);
+  .then(answers => {
+    let readMeText = readMeTemplate(answers);
 
-    fs.appendFile("GenREADME.md", title, err => {
-      if(err){
+    fs.appendFile("newREADME.md", readMeText, err => {
+      if (err) {
         return console.log(err);
       }
-      console.log("You're README has been generated!")
-    })
-    
+      console.log("You're README has been generated!");
+      // addBadges ();
+    });
 
-
-    const queryUrl = `https://api.github.com/users/${data.username}`;
+    const queryUrl = `https://api.github.com/users/${answers.username}`;
 
     axios
       .get(queryUrl)
       .then(response => {
-        // console.log(response.data);
-        console.log(data.username);
+        console.log(response.data);
+        console.log(answers.username);
         console.log(response.data.name);
         console.log(response.data.avatar_url);
         console.log(response.data.html_url);
-        console.log(data.email);
+        console.log(answers.email);
       })
       .catch(error => {
         console.log(error);
@@ -132,10 +169,38 @@ inquirer
   });
 
 
+// function questionTemplate (data) {
+//   return `
+// #QUESTIONS
+  
+//   `
+// }
+
+// const addBadges = () => {
+//   inquirer.prompt([
+//     {
+//       type: "confirm",
+//       message: "Would you like to add some badges?",
+//       name: "addbadge"
+//     },
+//     {
+//       type: "checkbox",
+//       message: "Which badges would you like to add?",
+//       name: "badges",
+//       when: function(answers) {
+//         return answers.addbadge;
+//       }
+//     }
+//   ]).then(data => {
+//     console.log(data)
+//   })
+//   .catch(err => {
+//     return console.log(err);
+//   })
+// }
 
 // * At least one badge
 // Add list of 4 badges: [![License](https://img.shields.io/static/v1?label=License&message=MIT&color=brightgreen)](https://www.mit.edu/~amini/LICENSE.md)
-
 
 // * Table of Contents - Add with ## ("h2") [Optional]
 // Add a table of contents to make it easy for users to find what they need.
@@ -207,13 +272,6 @@ inquirer
 // One of the most important skills to master as a web developer is version control. Building the habit of committing via Git is important for two reasons:
 // * Your commit history is a signal to employers that you are actively working on projects and learning new skills.
 // * Your commit history allows you to revert your code base in the event that you need to return to a previous state.
-
-// Follow these guidelines for committing:
-// * Make single-purpose commits for related changes to ensure a clean, manageable history. If you are fixing two issues, make two commits.
-// * Write descriptive, meaningful commit messages so that you and anyone else looking at your repository can easily understand its history.
-// * Don't commit half-done work, for the sake of your collaborators (and your future self!).
-// * Test your application before you commit to ensure functionality at every step in the development process.
-// We would like you to have more than 200 commits by graduation, so commit early and often!
 
 // ## Submission on BCS
 // You are required to submit the following:
