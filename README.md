@@ -34,18 +34,22 @@ To install necessary dependencies, run the following command:
 
 ```
 npm install
-node index.js
+
 ```
 
 ## Usage 
 
-(PROVIDE INSTUCTIONS AND EXAMPLES FOR USE. INCLUDE SCREENSHOTS AS NEEDED)
+To use the generator, type in the followin command and then answer all the questions, or press enter to use default for appicable questions. See gif below for quick instructions.
+
+```
+node index.js
+
+```
+<img src="./assets/ezREADME.gif" alt="README Generator GIF"/>
 
 ## Credits
 
 No collaborators in this version of README-Generator. 
-
-(PROVIDE TUTORIALS)
 
 ## License
 
@@ -71,5 +75,5 @@ npm test
 
 <img src="https://avatars0.githubusercontent.com/u/60041697?v=4" alt="avatar" style="border-radius:16px" width="50" />
 
-If you have any questions about this repo, open an issue or contact [noobatl](https://api.github.com/users/noobatl) directly at info@noobusa.com.
+If you have any questions about this repo, open an issue or contact [JJ Villacres](https://api.github.com/users/noobatl) directly at info@noobusa.com.
 

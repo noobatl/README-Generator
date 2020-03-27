@@ -6,7 +6,7 @@ function readMeTemplate(res) {
   return `
 # ${res.title}\n
 
-[![GitHub package.json version](https://img.shields.io/github/package-json/v/noobatl/README-Generator?style=flat)](https://github.com/noobatl/README-Generator) [![npm](https://img.shields.io/npm/v/npm?style=flat)](https://www.npmjs.com/) [![node](https://img.shields.io/node/v/inquirer?style=flat)](https://nodejs.org/en/) [![License](https://img.shields.io/static/v1?label=License&message=MIT&color=brightgreen)](https://www.mit.edu/~amini/LICENSE.md) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md)clear
+${res.badges}\n
 
 ## DESCRIPTION\n 
 ${res.description1}
@@ -33,6 +33,9 @@ ${res.description5}
       
 ## INSTALLATION\n
 ${res.installation}
+
+## USAGE\n
+${res.usage}
   
 ## CREDITS\n
 ${res.credits1}
@@ -46,7 +49,12 @@ ${res.license}
 ${res.contributing}
   
 ## TESTS\n
-${res.tests}`;
+${res.tests}
+
+## QUESTIONS\n
+Username: ${res.username}\n
+Email: ${res.email}\n
+`;
 }
 
 inquirer
@@ -68,6 +76,40 @@ inquirer
       type: "input",
       message: "Enter your project's title:",
       name: "title"
+    },
+    {
+      // BADGES
+      type: "checkbox",
+      message: "Which badges would you like to add to your README.md?",
+      name: "badges",
+      choices: [
+        {
+          name: "Github",
+          value:
+            "[![GitHub package.json version](https://img.shields.io/github/package-json/v/noobatl/README-Generator?style=flat)](https://github.com/noobatl/README-Generator)",
+          checked: true
+        },
+        {
+          name: "npm",
+          value: "[![npm](https://img.shields.io/npm/v/npm?style=flat)](https://www.npmjs.com/)",
+          checked: true
+        },
+        {
+          name: "node.js",
+          value: "[![node](https://img.shields.io/node/v/inquirer?style=flat)](https://nodejs.org/en/)",
+          checked: true
+        },
+        {
+          name: "MIT",
+          value: "[![License](https://img.shields.io/static/v1?label=License&message=MIT&color=brightgreen)](https://www.mit.edu/~amini/LICENSE.md)",
+          checked: true
+        },
+        {
+          name: "Contributor",
+          value: "[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md)",
+          checked: true
+        }
+      ]
     },
     {
       // DESCRIPTION - 5 questions
@@ -100,14 +142,22 @@ inquirer
       type: "input",
       message:
         "Installation: What are the steps required to install your project?",
-      name: "installation"
+      name: "installation",
+      default: "npm install"
+    },
+    {
+      // USAGE
+      type: "input",
+      message: "Usage: Can you provide instructions and examples for use? Include links to screenshots as needed.",
+      name: "usage"
     },
     {
       // CREDITS - 3 questions
       type: "input",
       message:
         "Credits: If you had any collaborators, list their names and/or github usernames?",
-      name: "credits1"
+      name: "credits1",
+      default: "No collaborators in this version."
     },
     {
       type: "input",
@@ -122,28 +172,33 @@ inquirer
     },
     {
       // LICENSE
-      type: "confirm",
+      type: "input",
       message: "License: Do you want to add a standard MIT License?",
-      name: "license"
+      name: "license",
+      default:
+        "MIT License Copyright (c) 2020. Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
     },
     {
       // CONTRIBUTING
-      type: "confirm",
+      type: "input",
       message:
         "Contributing: Do you want to add a Contributor Code of Conduct?",
-      name: "contributing"
+      name: "contributing",
+      default:
+        "Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms."
     },
     {
       // TESTS
       type: "input",
       message: "Tests: How do you run tests for your application?",
-      name: "tests"
+      name: "tests",
+      default: "npm test"
     }
   ])
   .then(answers => {
     let readMeText = readMeTemplate(answers);
 
-    fs.appendFile("newREADME.md", readMeText, err => {
+    fs.appendFile("GeneratedREADME.md", readMeText, err => {
       if (err) {
         return console.log(err);
       }
@@ -156,125 +211,39 @@ inquirer
     axios
       .get(queryUrl)
       .then(response => {
-        console.log(response.data);
-        console.log(answers.username);
-        console.log(response.data.name);
-        console.log(response.data.avatar_url);
-        console.log(response.data.html_url);
-        console.log(answers.email);
+        // console.log(response.data);
+        // console.log(answers.username);
+        // console.log(response.data.name);
+        // console.log(response.data.avatar_url);
+        // console.log(response.data.html_url);
+        // console.log(answers.email);
+        let questionText = questionsTemplate(response.data);
+        fs.appendFile("GeneratedREADME.md", questionText, err => {
+          if (err) {
+            return console.log(err);
+          }
+          console.log("You're README has been updated!");
       })
-      .catch(error => {
-        console.log(error);
-      });
-  });
+  }).catch(function(err){
+    console.log(err);
+  })
+
+}).catch(function(err){
+  console.log(err);
+});
 
 
-// function questionTemplate (data) {
-//   return `
-// #QUESTIONS
-  
-//   `
-// }
+function questionsTemplate (data) {
+return `
 
-// const addBadges = () => {
-//   inquirer.prompt([
-//     {
-//       type: "confirm",
-//       message: "Would you like to add some badges?",
-//       name: "addbadge"
-//     },
-//     {
-//       type: "checkbox",
-//       message: "Which badges would you like to add?",
-//       name: "badges",
-//       when: function(answers) {
-//         return answers.addbadge;
-//       }
-//     }
-//   ]).then(data => {
-//     console.log(data)
-//   })
-//   .catch(err => {
-//     return console.log(err);
-//   })
-// }
+<img src="${data.avatar_url}" alt="avatar" style="border-radius:16px" width="50" />
 
-// * At least one badge
-// Add list of 4 badges: [![License](https://img.shields.io/static/v1?label=License&message=MIT&color=brightgreen)](https://www.mit.edu/~amini/LICENSE.md)
-
-// * Table of Contents - Add with ## ("h2") [Optional]
-// Add a table of contents to make it easy for users to find what they need.
-//   * Installation
-//   * Usage
-//   * Credits
-//   * License
-//   * Contributing
-//   * Tests
-//   * Questions
-
-// * Usage - Add with ## ("h2")
-// Provide instructions and examples for use
-// Include screenshots as needed.
-
-// * License
-// The last section - let developers know what they can and cannot do with your project.
-// MIT License
-// Copyright (c) [year] [fullname]
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-
-// ```
-// AS A developer
-
-// I WANT a README generator
-
-// SO THAT I can easily put together a good README for a new project
-
-// GIVEN the developer has a GitHub profile and a repository
-
-// WHEN prompted for the developer's GitHub username and repo specific information
-
-// THEN a README for the repo is generated
-
-// ```
-
-// ## Minimum Requirements
-// * Functional, deployed application.
-// * GitHub repository with a unique name and a README describing project.
-// * The generated README includes a bio image from the user's GitHub profile.
-// * The generated README includes the user's email.
-// * The generated README includes the following sections:
-//   * Title
-//   * Description
-//   * Table of Contents
-//   * Installation
-//   * Usage
-//   * License
-//   * Contributing
-//   * Tests
-//   * Questions
-// * The generated README includes 1 badge that's specific to the repository.
-
-// ## Commit Early and Often
-// One of the most important skills to master as a web developer is version control. Building the habit of committing via Git is important for two reasons:
-// * Your commit history is a signal to employers that you are actively working on projects and learning new skills.
-// * Your commit history allows you to revert your code base in the event that you need to return to a previous state.
+If you have any questions about this repo, open an issue or contact [${data.name}](${data.html_url}) directly at the email above.
+`
+};
 
 // ## Submission on BCS
 // You are required to submit the following:
 // * An animated GIF demonstrating the app functionality
 // * A generated README.md file for a project repo.
-// * The URL of the GitHub repository
+// * The URL of the GitHub
