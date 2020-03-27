@@ -90,16 +90,41 @@ inquirer
     }
   ])
   .then(data => {
+    
+    const title = `# ${data.title}`;
+    console.log(data.description1);
+    console.log(data.description2);
+    console.log(data.description3);
+    console.log(data.description4);
+    console.log(data.description5);
+    console.log(data.installation);
+    console.log(data.credits1);
+    console.log(data.credits2);
+    console.log(data.credits3);
+    console.log(data.license);
+    console.log(data.contributing);
+    console.log(data.tests);
+
+    fs.appendFile("GenREADME.md", title, err => {
+      if(err){
+        return console.log(err);
+      }
+      console.log("You're README has been generated!")
+    })
+    
+
+
     const queryUrl = `https://api.github.com/users/${data.username}`;
-    console.log(queryUrl);
-    console.log(data.email);
 
     axios
       .get(queryUrl)
       .then(response => {
-        console.log(response.data);
+        // console.log(response.data);
+        console.log(data.username);
         console.log(response.data.name);
         console.log(response.data.avatar_url);
+        console.log(response.data.html_url);
+        console.log(data.email);
       })
       .catch(error => {
         console.log(error);
